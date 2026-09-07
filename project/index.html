@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <button id="loadUsers">Load Users</button>
+    <div id="result"></div>
+    
+</body>
+
+    <script>
+        let loadUsers = document.getElementById('loadUsers');
+        let result = document.getElementById('result');
+
+        loadUsers.addEventListener('click', function () {
+            
+            fetch('api/users.php')
+                .then(response => response.json())
+                .then(data => {
+                    //console.log(data);
+                    //result.innerHTML = data.products[0].name;
+                    data.products.forEach(product => {
+                        result.innerHTML += 
+                            `
+                            <p>
+                                ID: ${product.id}
+                                Product: ${product.name}
+                            </p>
+                        `;
+                    })
+                });
+        });
+    </script>
+</html>
