@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EliteFort - ToDo</title>
+</head>
+<body>
+    <!-- <h1 id="head" class="div">Hello, Nisath. </h1>
+    <div id="some"></div> -->
+
+    <!-- <button id="button">1</button> -->
+
+    <h2>ToDo List</h2>
+    <ul id = 'todoList'>
+
+    </ul>
+
+    <div>
+        <input id="addTask" type="text">
+        <button id="submit" >Add Task</button>   
+    </div>
+    <h3>Completed</h3>
+    <ul id="doneList">
+
+    </ul>
+
+</body>
+    <!-- <script src="script.js"></script> -->
+    <script>
+        let submit = document.getElementById('submit');
+        let addTask = document.getElementById('addTask');
+        let todoList = document.getElementById('todoList');
+        let doneList = document.getElementById('doneList');
+
+        let list = new Array();
+
+
+        submit.addEventListener('click', (event)=>{
+            if(addTask.value != '') {
+                //console.log(addTask.value);
+                list.push(addTask.value);
+                //console.log(list);
+                todoList.innerHTML += "<li id='" + (list.length - 1) + "'><button onclick='complete(" + (list.length - 1)+ ")'>" + addTask.value + "</button></li>";
+                //todoList.innerHTML+= "<li id='" + (list.length - 1) + "'>" + addTask.value + "</li>";
+                addTask.value = '';
+            }
+        });
+
+        function complete(id) {
+            doneList.innerHTML += '<li>'+ list[id] +'</li>';
+            document.getElementById(id).style.display = "none";
+        }
+
+
+
+    </script>
+</html>
