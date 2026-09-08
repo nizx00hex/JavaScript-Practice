@@ -42,38 +42,11 @@
             <th class="text-end">Actions</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td class="fw-semibold">arun_k</td>
-            <td><span class="badge badge-age">24</span></td>
-            <td>Chennai</td>
-            <td class="text-end">
-              <button class="btn btn-sm btn-outline-primary btn-icon me-1" data-bs-toggle="modal" data-bs-target="#userModal"><i class="fa-solid fa-pen"></i></button>
-              <button class="btn btn-sm btn-outline-danger btn-icon" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-solid fa-trash"></i></button>
-            </td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td class="fw-semibold">priya_s</td>
-            <td><span class="badge badge-age">29</span></td>
-            <td>Coimbatore</td>
-            <td class="text-end">
-              <button class="btn btn-sm btn-outline-primary btn-icon me-1" data-bs-toggle="modal" data-bs-target="#userModal"><i class="fa-solid fa-pen"></i></button>
-              <button class="btn btn-sm btn-outline-danger btn-icon" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-solid fa-trash"></i></button>
-            </td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td class="fw-semibold">nisath</td>
-            <td><span class="badge badge-age">22</span></td>
-            <td>Madurai</td>
-            <td class="text-end">
-              <button class="btn btn-sm btn-outline-primary btn-icon me-1" data-bs-toggle="modal" data-bs-target="#userModal"><i class="fa-solid fa-pen"></i></button>
-              <button class="btn btn-sm btn-outline-danger btn-icon" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-solid fa-trash"></i></button>
-            </td>
-          </tr>
+        
+        <tbody id='userTable'>
+
         </tbody>
+
       </table>
     </div>
   </div>
@@ -128,7 +101,7 @@
       </div>
       <div class="modal-footer justify-content-center">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-danger">Delete</button>
+        <button type="button" id="confirmDelete" class="btn btn-danger">Delete</button>
       </div>
     </div>
   </div>
