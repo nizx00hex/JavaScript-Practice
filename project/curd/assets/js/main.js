@@ -1,624 +1,215 @@
+// async function loadUsers() {
+//     const response = await fetch('api/users.php');
+//     const result = await response.json();
 
-// ======================================================
-// USER CRUD - main.js
-// ======================================================
+//     console.log(result);
+// }
 
-
-// ------------------------------------------------------
-// GLOBAL VARIABLES
-// ------------------------------------------------------
-
-let users = [];
+// loadUsers();
 
 
-// ------------------------------------------------------
-// DOM ELEMENTS
-// ------------------------------------------------------
-
-const userTable = document.getElementById("userTable");
-
-const usernameInput = document.getElementById("username");
-const ageInput = document.getElementById("age");
-const cityInput = document.getElementById("city");
-
-const saveButton = document.getElementById("save");
-const confirmDeleteButton = document.getElementById("confirmDelete");
-
-const searchInput = document.getElementById("searchInput");
-
-const userModalElement = document.getElementById("userModal");
-const deleteModalElement = document.getElementById("deleteModal");
-
-const userModalTitle =
-    document.querySelector("#userModal .modal-title");
-
-
-// ------------------------------------------------------
-// BOOTSTRAP MODALS
-// ------------------------------------------------------
-
-const userModal = bootstrap.Modal.getOrCreateInstance(
-    userModalElement
-);
-
-const deleteModal = bootstrap.Modal.getOrCreateInstance(
-    deleteModalElement
-);
-
-
-// ------------------------------------------------------
-// LOAD USERS
-// ------------------------------------------------------
 
 async function loadUsers() {
+    const response = await fetch('api/users.php');
+    const result = await response.json();
+    const table = document.getElementById('userTable');
 
-    try {
+    table.innerHTML = "";
 
-        const response = await fetch("api/users.php");
+    result.data.forEach(user => {
+        table.innerHTML += `
+        
+        <tr>
+            <td>${user.id}</td>
+            <td class="fw-semibold">${user.username}</td>
+            <td><span class="badge badge-age">${user.age}</span></td>
+            <td>${user.city}</td>
+            <td class="text-end">
 
-        if (!response.ok) {
-            throw new Error("Failed to load users");
-        }
+                <button
+                    class="btn btn-sm btn-outline-primary btn-icon me-1" 
+                    data-bs-toggle="modal" 
+                    onclick="editUser(${user.id})"
+                    data-bs-target="#userModal">
+                    <i class="fa-solid fa-pen"></i>
+                </button>
 
-        const result = await response.json();
+                <button 
+                    class="btn btn-sm btn-outline-danger btn-icon"
+                    data-bs-toggle="modal"
+                    onclick="deleteUser(${user.id})"
+                    data-bs-target="#deleteModal">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
 
-        if (!result.success) {
-            console.error(result.message);
-            return;
-        }
-
-        users = result.data;
-
-        renderUsers(users);
-
-    } catch (error) {
-
-        console.error("Load error:", error);
-
-    }
-}
-
-
-// ------------------------------------------------------
-// RENDER USERS
-// ------------------------------------------------------
-
-function renderUsers(data) {
-
-    userTable.innerHTML = "";
-
-    if (data.length === 0) {
-
-        userTable.innerHTML = `
-            <tr>
-                <td colspan="5" class="text-center text-muted py-4">
-                    No users found
-                </td>
-            </tr>
-        `;
-
-        updateRecordCount(0);
-
-        return;
-    }
-
-
-    data.forEach((user, index) => {
-
-        userTable.innerHTML += `
-
-            <tr>
-
-                <td>
-                    ${index + 1}
-                </td>
-
-                <td class="fw-semibold">
-                    ${escapeHTML(user.username)}
-                </td>
-
-                <td>
-                    <span class="badge badge-age">
-                        ${user.age}
-                    </span>
-                </td>
-
-                <td>
-                    ${escapeHTML(user.city)}
-                </td>
-
-                <td class="text-end">
-
-                    <!-- EDIT BUTTON -->
-
-                    <button
-                        type="button"
-                        class="btn btn-sm btn-outline-primary btn-icon me-1"
-                        onclick="editUser(${user.id})">
-
-                        <i class="fa-solid fa-pen"></i>
-
-                    </button>
-
-
-                    <!-- DELETE BUTTON -->
-
-                    <button
-                        type="button"
-                        class="btn btn-sm btn-outline-danger btn-icon"
-                        onclick="deleteUser(${user.id})">
-
-                        <i class="fa-solid fa-trash"></i>
-
-                    </button>
-
-                </td>
-
-            </tr>
-
-        `;
+            </td>
+        </tr>
+        `
     });
-
-
-    updateRecordCount(data.length);
 }
 
 
-// ------------------------------------------------------
-// RECORD COUNT
-// ------------------------------------------------------
-
-function updateRecordCount(count) {
-
-    const recordCount =
-        document.querySelector(".text-muted.small");
-
-    if (recordCount) {
-
-        recordCount.textContent =
-            `${count} record(s)`;
-
-    }
-}
+loadUsers();
 
 
-// ------------------------------------------------------
-// OPEN ADD USER MODAL
-// ------------------------------------------------------
+// document.getElementById('save').addEventListener('click', async () => {
 
-document
-    .querySelector('[data-bs-target="#userModal"]')
-    .addEventListener("click", function () {
+//     const username = document.getElementById('username').value;
+//     const age = document.getElementById('age').value;
+//     const city = document.getElementById('city').value;
 
-        clearForm();
+//     const response = await fetch('api/users.php', {
 
-        saveButton.dataset.id = "";
+//         method: 'POST',
+//         headers: {
+//             'Content-Type' : 'application/json'
+//         },
 
-        userModalTitle.textContent = "Add User";
+//         body: JSON.stringify({
+//             username: username,
+//             age: age,
+//             city: city
+//         })
+//     });
 
-    });
+//     const result = await response.json();
 
-
-// ------------------------------------------------------
-// EDIT USER
-// ------------------------------------------------------
-
-function editUser(id) {
-
-    const user = users.find(
-        user => Number(user.id) === Number(id)
-    );
-
-
-    if (!user) {
-
-        console.error("User not found");
-
-        return;
-    }
+//     console.log(result);
+    
+//     if (result.success) {
+//         clearForm();
+//         loadUsers();
+//     }
+// });
 
 
-    // Put user data into form
-
-    usernameInput.value = user.username;
-
-    ageInput.value = user.age;
-
-    cityInput.value = user.city;
-
-
-    // Store ID in save button
-
-    saveButton.dataset.id = user.id;
-
-
-    // Change modal title
-
-    userModalTitle.textContent = "Edit User";
-
-
-    // Open modal
-
-    userModal.show();
-}
-
-
-// ------------------------------------------------------
-// SAVE USER
-// CREATE + UPDATE
-// ------------------------------------------------------
-
-saveButton.addEventListener("click", async function () {
+document.getElementById('confirmDelete').addEventListener('click', async function () {
 
     const id = this.dataset.id;
 
+    const response = await fetch(
+        `api/users.php?id=${id}`,
+        {
+            method: 'DELETE'
+        }
+    );
 
-    const username =
-        usernameInput.value.trim();
+    const result = await response.json();
 
-    const age =
-        ageInput.value.trim();
+    if (result.success) {
+        const modelElement = document.getElementById('deleteModal');
 
-    const city =
-        cityInput.value.trim();
+        const modal = bootstrap.Modal.getInstance(modelElement);
 
+        modal.hide();
 
-    // --------------------------------------------------
-    // VALIDATION
-    // --------------------------------------------------
-
-    if (!username || !age || !city) {
-
-        alert("Please fill all fields.");
-
-        return;
+        loadUsers();
     }
+})
 
+// async function deleteUser(id) {
+//     if(!confirm('Delete this user?')) {
+//         return;
+//     }
 
-    if (age < 1 || age > 120) {
+//     const response = await fetch(
+//         `api/users.php?id=${id}`,
+//         {
+//             method: 'DELETE'
+//         }    
+//     );
 
-        alert("Age must be between 1 and 120.");
+//     const result = await response.json();
 
-        return;
-    }
+//     console.log(result);
 
+//     loadUsers();
+// }
+function deleteUser(id) {
+
+    const button = document.getElementById('confirmDelete');
+
+    button.dataset.id = id;
+
+}
+
+document.getElementById('save').addEventListener('click', async () => {
+    const button = document.getElementById('save');
+    const id = button.dataset.id;
+
+    const username = document.getElementById('username').value;
+    const age = document.getElementById('age').value;
+    const city = document.getElementById('city').value;
 
     let response;
 
+    if (id) {
 
-    try {
+        response = await fetch(
+            `api/users.php?id=${id}`,
+            {
+                method : "PUT",
+                headers: {
+                    'Content-Type' : 'application/json'
+                },
 
-        // ------------------------------------------------
-        // UPDATE
-        // ------------------------------------------------
-
-        if (id) {
-
-            response = await fetch(
-                `api/users.php?id=${id}`,
-                {
-
-                    method: "PUT",
-
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body: JSON.stringify({
-
-                        username: username,
-
-                        age: age,
-
-                        city: city
-
-                    })
-
-                }
-            );
-
-        }
-
-
-        // ------------------------------------------------
-        // CREATE
-        // ------------------------------------------------
-
-        else {
-
-            response = await fetch(
-                "api/users.php",
-                {
-
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body: JSON.stringify({
-
-                        username: username,
-
-                        age: age,
-
-                        city: city
-
-                    })
-
-                }
-            );
-
-        }
-
-
-        // ------------------------------------------------
-        // RESPONSE
-        // ------------------------------------------------
-
-        const result =
-            await response.json();
-
-
-        console.log(result);
-
-
-        if (!result.success) {
-
-            alert(
-                result.message ||
-                "Something went wrong."
-            );
-
-            return;
-        }
-
-
-        // ------------------------------------------------
-        // SUCCESS
-        // ------------------------------------------------
-
-        clearForm();
-
-        this.dataset.id = "";
-
-
-        // Reset title
-
-        userModalTitle.textContent =
-            "Add User";
-
-
-        // Close modal
-
-        userModal.hide();
-
-
-        // Reload users
-
-        await loadUsers();
-
-
-    } catch (error) {
-
-        console.error(
-            "Save error:",
-            error
+                body: JSON.stringify({
+                    username,
+                    age,
+                    city
+                })
+            }
         );
-
-        alert(
-            "Something went wrong while saving the user."
+    } else {
+        response = await fetch(
+            'api/users.php',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type' : 'application/json'
+                },
+                
+                body: JSON.stringify({
+                    username,
+                    age,
+                    city
+                })
+            }
         );
-
     }
 
+    const result = await response.json();
+    console.log(result);
+
+    if (result.success) {
+        clearForm();
+        button.dataset.id = '';
+        loadUsers();
+    }
 });
 
 
-// ------------------------------------------------------
-// CLEAR FORM
-// ------------------------------------------------------
-
 function clearForm() {
-
-    usernameInput.value = "";
-
-    ageInput.value = "";
-
-    cityInput.value = "";
-
+    document.getElementById('username').value = "";
+    document.getElementById('age').value = "";
+    document.getElementById('city').value = "";
 }
 
+async function editUser(id) {
 
-// ------------------------------------------------------
-// DELETE USER - OPEN CONFIRMATION MODAL
-// ------------------------------------------------------
+    const response = await fetch(`api/users.php?id=${id}`);
 
-function deleteUser(id) {
+    const result = await response.json();
 
-    // Store user ID
+    const user = result.data.find(user => user.id == id);
 
-    confirmDeleteButton.dataset.id = id;
-
-
-    // Find user
-
-    const user = users.find(
-        user => Number(user.id) === Number(id)
-    );
-
-
-    // Optional: show username in modal
-
-    if (user) {
-
-        const message =
-            deleteModalElement.querySelector(".modal-body p");
-
-        message.textContent =
-            `Delete "${user.username}"?`;
-
+    if (!user) {
+        return;
     }
 
+    document.getElementById('username').value = user.username;
+    document.getElementById('age').value = user.age;
+    document.getElementById('city').value = user.city;
 
-    // Open Bootstrap modal
-
-    deleteModal.show();
+    document.getElementById('save').dataset.id = id;
 }
-
-
-// ------------------------------------------------------
-// CONFIRM DELETE
-// ------------------------------------------------------
-
-confirmDeleteButton.addEventListener(
-    "click",
-    async function () {
-
-        const id = this.dataset.id;
-
-
-        if (!id) {
-
-            console.error(
-                "No user ID selected."
-            );
-
-            return;
-        }
-
-
-        try {
-
-            const response = await fetch(
-                `api/users.php?id=${id}`,
-                {
-                    method: "DELETE"
-                }
-            );
-
-
-            const result =
-                await response.json();
-
-
-            console.log(result);
-
-
-            if (!result.success) {
-
-                alert(
-                    result.message ||
-                    "Failed to delete user."
-                );
-
-                return;
-            }
-
-
-            // Remove stored ID
-
-            this.dataset.id = "";
-
-
-            // Close modal
-
-            deleteModal.hide();
-
-
-            // Reload users
-
-            await loadUsers();
-
-
-        } catch (error) {
-
-            console.error(
-                "Delete error:",
-                error
-            );
-
-            alert(
-                "Something went wrong while deleting the user."
-            );
-
-        }
-
-    }
-);
-
-
-// ------------------------------------------------------
-// SEARCH
-// ------------------------------------------------------
-
-searchInput.addEventListener(
-    "input",
-    function () {
-
-        const search =
-            this.value
-                .trim()
-                .toLowerCase();
-
-
-        if (!search) {
-
-            renderUsers(users);
-
-            return;
-        }
-
-
-        const filteredUsers =
-            users.filter(user => {
-
-                const username =
-                    String(user.username)
-                        .toLowerCase();
-
-                const city =
-                    String(user.city)
-                        .toLowerCase();
-
-
-                return (
-                    username.includes(search) ||
-                    city.includes(search)
-                );
-
-            });
-
-
-        renderUsers(filteredUsers);
-
-    }
-);
-
-
-// ------------------------------------------------------
-// ESCAPE HTML
-// ------------------------------------------------------
-// Prevent user data from being directly inserted
-// into HTML without escaping special characters.
-// ------------------------------------------------------
-
-function escapeHTML(value) {
-
-    return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-
-}
-
-
-// ------------------------------------------------------
-// INITIAL LOAD
-// ------------------------------------------------------
-
-loadUsers();

@@ -1,0 +1,11 @@
+{
+    "success":true,
+    "data":[
+        {
+            "id":1,
+            "username":"nisath",
+            "age":20,
+            "city":"Valaichchenai"
+        }
+    ]
+}
