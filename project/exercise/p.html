@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <input type="text" id="nameInput">
+    <button id="addBtn">Add</button>
+    
+    <ul id="list">
+
+    </ul>
+</body>
+    <script>
+        const nameInput = document.getElementById('nameInput');
+        const addBtn = document.getElementById('addBtn');
+        const list = document.getElementById('list');
+
+
+        addBtn.addEventListener('click', ()=> {
+            const li = document.createElement('li');
+            const delBtn = document.createElement('button');
+            delBtn.textContent = 'Delete';
+
+            li.textContent = nameInput.value;
+            list.appendChild(li);
+            li.appendChild(delBtn);
+            nameInput.value = '';
+
+            delBtn.addEventListener('click', ()=> {
+                li.remove();
+            })
+        });
+
+    </script>
+</html>

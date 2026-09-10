@@ -40,8 +40,19 @@
 
 // btn.addEventListener('click', function () {
 //     const li = document.createElement('li');
+//     const deleteBtn = document.createElement('button');
+    
 //     li.textContent = nameTask.value;
+//     deleteBtn.textContent = 'Delete';
+    
+//     deleteBtn.addEventListener('click', function () {
+//         li.remove();
+//     });
+
+//     li.appendChild(deleteBtn); 
 //     list.appendChild(li);
+
+//     nameTask.value = '';
 //     // document.body.appendChild(li);
 //     // list.textContent = `Hello, ${nameInput.value}`;
 // });

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercise</title>
+</head>
+<body>
+    <!-- <h1 id="title">Waiting...</h1> -->
+     <!-- <input type="text" id="name" placeholder="Enter your names"> -->
+    <!-- <button id="btn">Show</button> -->
+
+    <!-- <h1 id="result">Waiting...</h1> -->
+
+
+
+    <!-- <h1 id="title">Hello</h1>
+    <button id="btn">Show</button> -->
+    <input type="text" id="task" placeholder="Enter task">
+    <button id="addbtn">Add</button>
+    <ul id="list">
+
+    </ul>
+
+
+</body>
+    <script>
+        //const h2 = document.createElement('h2');
+        //const title = document.getElementById('title');
+        
+        //const nameInput = document.getElementById('name');
+        const task = document.getElementById('task');
+        const addbtn = document.getElementById('addbtn');
+        const list = document.getElementById('list');
+        //const result = document.getElementById('result');
+        //const title = document.querySelector('h1')
+
+        addbtn.addEventListener('click', function () {
+
+            const li = document.createElement('li');
+            const deleteBtn = document.createElement("button");
+            li.textContent = task.value;
+            list.appendChild(li);
+            li.appendChild(deleteBtn);
+            deleteBtn.textContent = 'Delete';
+            task.value = '';
+
+            deleteBtn.addEventListener('click', function () {
+                li.remove();
+            });
+            //h2.textContent = 'Welcome, Nisath.';
+            //result.appendChild(h2);
+            //result.innerHTML = `<h1>Hello, ${nameInput.value}</h1>`;
+
+        });
+    </script>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+    <style>
+        .completed {
+            text-decoration: line-through;
+        }
+    </style>
+
+<body>
+        <ul id="list">
+            <h1 id="task">LIFE</h1>
+        </ul>
+</body>
+    <script>
+        const task = document.getElementById('task');
+        task.addEventListener('click', ()=> {
+            task.classList.toggle('completed')
+        })
+    </script>
+</html>
